@@ -40,8 +40,8 @@ function! s:jjdiff(bang, ...) abort
   " Extract revision from JJ comment lines
   let revision = ''
   for line in getline(1, '$')
-    if line =~ '^JJ: Change \w\+'
-      let revision = matchstr(line, 'Change \zs\w\+')
+    if line =~ '^JJ: change-id: \w\+'
+      let revision = matchstr(line, 'change-id: \zs\w\+')
       break
     endif
   endfor
@@ -55,8 +55,11 @@ function! s:jjdiff(bang, ...) abort
   if a:0
     let extra = join(map(copy(a:000), 'shellescape(v:val)'))
   else
-    let extra = "--git --stat=".&columns
+    let extra = "--git"
   endif
-  call system("jj diff -r " . shellescape(revision) . " --color never --no-pager " . extra . " > " . shellescape(name))
+  " Run jj diff for the revision being described
+  let cmd = "jj diff -r " . revision . " --color never --no-pager " . extra
+  call system(cmd . " > " . shellescape(name))
+  
   exe 'pedit +setlocal\ buftype=nowrite\ nobuflisted\ noswapfile\ nomodifiable\ filetype=diff' fnameescape(name)
 endfunction

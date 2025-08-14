@@ -52,6 +52,9 @@ syn region jjdescriptionDiff start=/\%(^diff --\%(git\|cc\|combined\) \)\@=/ end
 syn match   jjdescriptionComment "^JJ:.*"
 syn region  jjdescriptionRest start=/^JJ: ignore-rest$/ end=/\%$/ contains=jjdescriptionComment,jjdescriptionDiff
 
+" Highlight change-id line
+syn match   jjdescriptionChangeId "^JJ: change-id: \zs\w\+" contained containedin=jjdescriptionComment
+
 " Headers are comments which end with a colon, followed by a non-empty line.
 syn match   jjdescriptionHeader	"\%(^JJ:\s*\)\@<=\S.*:\%(\n^$\)\@!$" contained containedin=jjdescriptionComment
 
@@ -66,6 +69,7 @@ syn match   jjdescriptionSelectedFile	".*" contained
 
 hi def link jjdescriptionSummary		Keyword
 hi def link jjdescriptionComment		Comment
+hi def link jjdescriptionChangeId		Identifier
 hi def link jjdescriptionSelectedType	jjdescriptionType
 hi def link jjdescriptionType		Type
 hi def link jjdescriptionHeader		PreProc
